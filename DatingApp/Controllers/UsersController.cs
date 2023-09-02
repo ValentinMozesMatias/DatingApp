@@ -36,7 +36,7 @@ namespace DatingApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<AppUser>>> UpdateProClimber([FromQuery] AppUser appUserRequest)
+        public async Task<ActionResult<List<AppUser>>> UpdateUser([FromQuery] AppUser appUserRequest)
         {
             var updateUser = await _context.Users.FindAsync(appUserRequest.Id);
             if (updateUser == null)
@@ -52,8 +52,8 @@ namespace DatingApp.Controllers
             return Ok(await _context.Users.ToListAsync());
         }
 
-        [HttpDelete("(id)")]
-        public async Task<ActionResult<List<AppUser>>> DeleteProClimber([FromQuery] int id)
+        [HttpDelete("DeleteUser/(id)")]
+        public async Task<ActionResult<List<AppUser>>> DeleteUser([FromQuery] int id)
         {
             var deleteUser = await _context.Users.FindAsync(id);
             if (deleteUser == null)
@@ -64,6 +64,41 @@ namespace DatingApp.Controllers
             {
                 _context.Users.Remove(deleteUser);
             }
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Users.ToListAsync());
+        }
+
+        [HttpDelete("DeleteDuplicateUser")]
+        public async Task<ActionResult<List<AppUser>>> DeleteDuplicateUser()
+        {
+            // Find users with the same username but different IDs
+            var duplicateUsernames = await _context.Users
+        .GroupBy(x => x.UserName)
+        .Where(g => g.Count() > 1)
+        .Select(g => g.Key) // Select the usernames
+        .ToListAsync();
+
+            if (duplicateUsernames != null && duplicateUsernames.Any())
+            {
+                foreach (var username in duplicateUsernames)
+                {
+                    var usersToDelete = await _context.Users
+                        .Where(u => u.UserName == username)
+                        .OrderByDescending(u => u.Id) // Keep the latest user and delete the rest
+                        .Skip(1) // Skip the latest user
+                        .ToListAsync();
+
+                    foreach (var user in usersToDelete)
+                    {
+                        _context.Users.Remove(user);
+                    }
+                }
+            }
+            else 
+            {
+                return NotFound("No duplicate users found");
+            }
+
             await _context.SaveChangesAsync();
             return Ok(await _context.Users.ToListAsync());
         }

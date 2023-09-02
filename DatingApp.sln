@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatingApp", "DatingApp\DatingApp.csproj", "{E418D1D7-4C73-44A5-BC8B-B086C8BC0701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatingApp", "DatingApp\DatingApp.csproj", "{E418D1D7-4C73-44A5-BC8B-B086C8BC0701}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerServiceDeleteDuplicateUsers", "WorkerServiceDeleteDuplicateUsers\WorkerServiceDeleteDuplicateUsers.csproj", "{8DE0B6A6-B00C-4E4F-A491-015FF0361D1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{E418D1D7-4C73-44A5-BC8B-B086C8BC0701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E418D1D7-4C73-44A5-BC8B-B086C8BC0701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E418D1D7-4C73-44A5-BC8B-B086C8BC0701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DE0B6A6-B00C-4E4F-A491-015FF0361D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE0B6A6-B00C-4E4F-A491-015FF0361D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE0B6A6-B00C-4E4F-A491-015FF0361D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE0B6A6-B00C-4E4F-A491-015FF0361D1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
