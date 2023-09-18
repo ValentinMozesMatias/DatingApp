@@ -1,11 +1,13 @@
 using DatingApp.Data;
 using DatingApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.Controllers
 {
-   
+
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
@@ -15,8 +17,9 @@ namespace DatingApp.Controllers
             _context = dataContext;
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<List<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
             return Ok(await _context.Users.ToListAsync());
         }
@@ -24,7 +27,14 @@ namespace DatingApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUsersById(int id)
         {
-            return Ok(await _context.Users.FindAsync(id));
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null) 
+            {
+                // User not found, return a 404 Not Found response
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         [HttpPost]
@@ -73,20 +83,20 @@ namespace DatingApp.Controllers
         {
             // Find users with the same username but different IDs
             var duplicateUsernames = await _context.Users
-        .GroupBy(x => x.UserName)
-        .Where(g => g.Count() > 1)
-        .Select(g => g.Key) // Select the usernames
-        .ToListAsync();
+                                    .GroupBy(x => x.UserName)
+                                    .Where(g => g.Count() > 1)
+                                    .Select(g => g.Key) // Select the usernames
+                                    .ToListAsync();
 
             if (duplicateUsernames != null && duplicateUsernames.Any())
             {
                 foreach (var username in duplicateUsernames)
                 {
                     var usersToDelete = await _context.Users
-                        .Where(u => u.UserName == username)
-                        .OrderByDescending(u => u.Id) // Keep the latest user and delete the rest
-                        .Skip(1) // Skip the latest user
-                        .ToListAsync();
+                                        .Where(u => u.UserName == username)
+                                        .OrderByDescending(u => u.Id) // Keep the latest user and delete the rest
+                                        .Skip(1) // Skip the latest user
+                                        .ToListAsync();
 
                     foreach (var user in usersToDelete)
                     {
