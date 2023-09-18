@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DatingApp.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp.Controllers
 {
@@ -6,6 +7,6 @@ namespace DatingApp.Controllers
     [Controller]
     public class BaseApiController :ControllerBase
     {
-
+       
     }
 }
